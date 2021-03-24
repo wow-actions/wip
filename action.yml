@@ -1,0 +1,22 @@
+name: Check WIP
+description: Sets a PR status to pending when any label or keyword in the title indicating the it is WIP.
+author: bubkoo <bubkoo.wy@gmail.com>
+
+inputs:
+  GITHUB_TOKEN:
+    description: Your GitHub token for authentication
+    required: true
+
+  labels:
+    required: false
+
+  keywords:
+    required: false
+
+runs:
+  using: node12
+  main: dist/index.js
+
+branding:
+  icon: alert-triangle
+  color: yellow
