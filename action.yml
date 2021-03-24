@@ -1,5 +1,5 @@
-name: Check WIP
-description: Sets a PR status to pending when any label or keyword in the title indicating the it is WIP.
+name: WIP Action
+description: Sets a PR status to pending if it finds specified terms in the pull request title, label or commit message.
 author: bubkoo <bubkoo.wy@gmail.com>
 
 inputs:
@@ -9,6 +9,7 @@ inputs:
   CONFIG_FILE:
     description: Config file path relative to your repo's root.
     required: false
+
 runs:
   using: node12
   main: dist/index.js

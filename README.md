@@ -1,6 +1,12 @@
-# check-wip
+# WIP Action
 
-> A GitHub Action sets a PR status to pending when any label or keyword in the title indicating it is WIP.
+> Sets a pull request status to pending. Inspirated by [WIP](https://github.com/wip/app) App.
+
+By default, WIP is setting a pull request status to pending if it finds one of the following terms in the pull request title or label.
+
+- wip
+- work in progress
+- 🚧
 
 ## Usage
 
@@ -13,11 +19,10 @@ on:
   pull_request:
     types:
       - opened
-      - synchronize
-      - reopened
       - edited
       - labeled
       - unlabeled
+      - synchronize
 
 jobs:
   WIP:
@@ -25,54 +30,50 @@ jobs:
     steps:
       - uses: bubkoo/check-wip@v1
         with:
+          # GitHub token for authentication.
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-          # Comma separated and case sensitive labels.
-          labels: do-not-merge, wip, rfc
-
-          # Comma separated and case insensitive keywords.
-          keywords: WIP, RFC
-
-          # A string label to differentiate this status from the status of
-          # other systems. This field is case-insensitive.
-          # @see: https://docs.github.com/en/rest/reference/repos#create-a-commit-status
-          context: WIP
-
-          # The target URL to associate with this status. This URL will be
-          # linked from the GitHub UI to allow users to easily see the source
-          # of the status. For example, if your continuous integration system
-          # is posting build status, you would want to provide the deep link
-          # for the build output for this specific SHA: http://ci.example.com/user/repo/build/sha
-          # @see: https://docs.github.com/en/rest/reference/repos#create-a-commit-status
-          target_url: ''
-
-          # A short description of the status.
-          # @see: https://docs.github.com/en/rest/reference/repos#create-a-commit-status
-          wip_description: work in progress
-          ready_description: ready for review
+          # Path to configuration file relative the root of your repo.
+          # Such as: .github/workflows/config/wip.yml
+          CONFIG_FILE: config-file-path-relative-to-repo-root
 ```
 
-And the shortest configuration looks like this:
+## Configuration
+
+Two options can be configured in the configuration file.
+
+- **locations**: any of `title` (pull request title), `label`(lable name) and `commit` (commit subject: 1st line of the pull request’s commit messages). Default: `title` and `label`
+- **terms**: list of strings to look for in the defined locations. All terms are case-insensitive. Default: "wip", "work in progress" and "🚧"
+
+Example:
 
 ```yml
-name: WIP
-on:
-  pull_request:
-    types:
-      - opened
-      - synchronize
-      - reopened
-      - edited
-      - labeled
-      - unlabeled
-jobs:
-  WIP:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: bubkoo/check-wip@v1
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+locations:
+  - title
+  - label
+  - commit
+terms:
+  - do not merge
+  - ⛔
 ```
+
+The above configuration makes WIP look for `do not merge` and `⛔` in the pull request title, all assigned label names and all commit subjects.
+
+You can also configure different terms for different locations:
+
+```yaml
+- terms: ⛔
+  locations:
+    - title
+    - label
+- terms:
+    - fixup!
+    - squash!
+  locations: commit
+```
+
+The above configuration looks first for `⛔ `in the pull request title and assigned label names. After that it looks for `fixup!` and `squash!` in the commit subjects.
+
+**A Note About Term Matching:** Terms which contain only non-word characters as defined by JS RegExp `[^a-za-z0-9_]` are matched regardless of word boundaries. Any other terms (which may contain a mix of word and non-word characters will only match when surrounded by start/end OR non-word characters.
 
 ## License
 
