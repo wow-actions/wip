@@ -27,18 +27,18 @@ jobs:
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-          # Comma separated and case sensitive labels.
+          # Comma separated and case sensitive labels. With the following default values.
           labels: do-not-merge, wip, rfc
 
-          # Comma separated and case insensitive keywords.
+          # Comma separated and case insensitive keywords. With the following default values.
           keywords: WIP, RFC
 
-          # optional
+          # [optional input]
           # A string label to differentiate this status from the status of
           # other systems. This field is case-insensitive.
           # context: WIP
 
-          # optional
+          # [optional input]
           # The target URL to associate with this status. This URL will be
           # linked from the GitHub UI to allow users to easily see the source
           # of the status. For example, if your continuous integration system
