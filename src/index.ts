@@ -20,6 +20,12 @@ async function start() {
         await Status.update(octokit, nextState)
         core.info(nextState.wip ? 'work in progress' : 'ready for review')
       } else {
+        if (nextState.checkRunId != null) {
+          await octokit.checks.update({
+            ...context.repo,
+            check_run_id: nextState.checkRunId,
+          })
+        }
         core.info('status not changed')
       }
     }

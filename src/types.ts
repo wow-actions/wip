@@ -10,7 +10,8 @@ export interface Section {
 }
 
 export interface State {
-  id?: string
+  checkRunId?: number
+  externalId?: string
   wip: boolean
   configs?: Section[]
   manual?: boolean

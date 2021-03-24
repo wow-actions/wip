@@ -83,15 +83,19 @@ export namespace Status {
       return true
     }
 
-    const [{ conclusion, external_id: id, output }] = checkRuns
+    debug(`Found check runs: ${checkRuns.length}`)
+
+    const [{ id, conclusion, external_id: externalId, output }] = checkRuns
     const isWip = conclusion !== 'success'
-    const hasOverride = output && /override/.test(output.title)
+    const hasOverride = output != null && /override/.test(output.title)
+    const preOverride = nextState.override === true
 
     debug(`Found check run: ${JSON.stringify({ conclusion, output })}`)
 
-    nextState.id = id
+    nextState.checkRunId = id
+    nextState.externalId = externalId
 
-    return isWip !== nextState.wip || hasOverride !== nextState.override
+    return isWip !== nextState.wip || hasOverride !== preOverride
   }
 
   export async function update(octokit: Octokit, nextState: State) {
@@ -116,15 +120,17 @@ export namespace Status {
 
     const output = Util.getOutput(nextState)
 
-    debug('update status with')
+    debug(
+      `${nextState.checkRunId != null ? 'update' : 'create'} check run with`,
+    )
     debug(`  metadata: ${JSON.stringify(options)}`)
     debug(`  output: ${JSON.stringify(output)}`)
 
-    return octokit.checks.create({
+    const metadata = {
       ...context.repo,
       ...options,
       output,
-      external_id: nextState.id || `[${checkName}]${uuidv4()}`,
+      external_id: nextState.checkRunId || `[${checkName}]${uuidv4()}`,
       head_sha: context.payload.pull_request!.head.sha,
 
       // workaround for https://github.com/octokit/rest.js/issues/874
@@ -136,6 +142,13 @@ export namespace Status {
         retries: 3,
         retryAfter: 3,
       },
-    })
+    }
+
+    return nextState.checkRunId
+      ? octokit.checks.update({
+          ...metadata,
+          check_run_id: nextState.checkRunId,
+        })
+      : octokit.checks.create(metadata)
   }
 }
