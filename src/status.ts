@@ -1,3 +1,4 @@
+import { debug } from '@actions/core'
 import { context } from '@actions/github'
 import { Octokit, State } from './types'
 import { Config } from './config'
@@ -29,6 +30,7 @@ export namespace Status {
           .filter((m) => m != null)
         match = matches[0]!
       }
+
       if (match == null) {
         if (commitSubjects == null) {
           // eslint-disable-next-line no-await-in-loop
@@ -71,12 +73,15 @@ export namespace Status {
 
     const checkRuns = data.check_runs
     if (checkRuns.length === 0) {
+      debug('no previous check runs.')
       return true
     }
 
     const [{ conclusion, output }] = checkRuns
     const isWip = conclusion !== 'success'
     const hasOverride = output && /override/.test(output.title)
+
+    debug(`last check run: ${JSON.stringify({ conclusion, output })}`)
 
     return isWip !== nextState.wip || hasOverride !== nextState.override
   }

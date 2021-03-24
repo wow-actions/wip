@@ -33,6 +33,10 @@ export namespace Config {
               })
             })
 
+            core.debug(
+              `Use manual configuration: ${JSON.stringify([defaultConfig])}`,
+            )
+
             return {
               configs,
               manual: true,
@@ -45,6 +49,8 @@ export namespace Config {
         throw error
       }
     }
+
+    core.debug(`Use default configuration: ${JSON.stringify([defaultConfig])}`)
 
     return {
       configs: [defaultConfig],
