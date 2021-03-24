@@ -12,10 +12,10 @@ async function start() {
 
     if (payload && action && actions.includes(action)) {
       const octokit = Util.getOctokit()
-      const newStatus = await Status.getStatus(octokit)
+      const newStatus = await Status.get(octokit)
       const hasChange = await Status.hasChange(octokit, newStatus)
       if (hasChange) {
-        await Status.updateStatus(octokit, newStatus)
+        await Status.update(octokit, newStatus)
         core.info(newStatus.wip ? 'work in progress' : 'ready for review')
       } else {
         core.info('status not changed')
