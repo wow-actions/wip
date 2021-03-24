@@ -33,8 +33,8 @@ jobs:
           # GitHub token for authentication.
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # Path to configuration file relative the root of your repo.
-          # Such as: .github/workflows/config/wip.yml
-          CONFIG_FILE: config-file-path-relative-to-repo-root
+          # e.g.: .github/workflows/config/wip.yml
+          CONFIG_FILE: config-file-path
 ```
 
 ## Configuration
