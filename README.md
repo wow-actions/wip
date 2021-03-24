@@ -1,4 +1,4 @@
-# check-wip
+# WIP
 
 > A GitHub Action sets a PR status to pending when any label or keyword in the title indicating it is WIP.
 
