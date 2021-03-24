@@ -48,8 +48,8 @@ jobs:
 
           # A short description of the status.
           # @see: https://docs.github.com/en/rest/reference/repos#create-a-commit-status
-          wip_description: 'work in progress'
-          ready_description: 'ready for review'
+          wip_description: work in progress
+          ready_description: ready for review
 ```
 
 And the shortest configuration looks like this:
