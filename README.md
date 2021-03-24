@@ -33,7 +33,6 @@ jobs:
           # Comma separated and case insensitive keywords.
           keywords: WIP, RFC
 
-          # optional
           # A string label to differentiate this status from the status of
           # other systems. This field is case-insensitive.
           # context: WIP
@@ -44,7 +43,29 @@ jobs:
           # of the status. For example, if your continuous integration system
           # is posting build status, you would want to provide the deep link
           # for the build output for this specific SHA: http://ci.example.com/user/repo/build/sha
-          # target_url: http://xxx
+          # target_url: ''
+```
+
+And the shortest configuration looks like this:
+
+```yml
+name: WIP
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - edited
+      - labeled
+      - unlabeled
+jobs:
+  WIP:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: bubkoo/check-wip@v1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 ## License

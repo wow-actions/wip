@@ -24,8 +24,7 @@ export namespace Util {
   }
 
   export function getContect() {
-    const context = core.getInput('context') || ''
-    return context.length ? context : undefined
+    return core.getInput('context') || 'WIP'
   }
 
   export function getTargetUrl() {
