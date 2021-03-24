@@ -9,7 +9,7 @@ on:
       - labeled
       - unlabeled
 jobs:
-  test:
+  WIP:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
