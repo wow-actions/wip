@@ -24,8 +24,25 @@ jobs:
       - uses: bubkoo/check-wip@v1
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+          # Comma separated and case sensitive labels.
           labels: do-not-merge, wip, rfc
-          keywords: WIP, wip, RFC, rfc
+
+          # Comma separated and case insensitive keywords.
+          keywords: WIP, RFC
+
+          # optional
+          # A string label to differentiate this status from the status of
+          # other systems. This field is case-insensitive.
+          # context: WIP
+
+          # optional
+          # The target URL to associate with this status. This URL will be
+          # linked from the GitHub UI to allow users to easily see the source
+          # of the status. For example, if your continuous integration system
+          # is posting build status, you would want to provide the deep link
+          # for the build output for this specific SHA: http://ci.example.com/user/repo/build/sha
+          # target_url: http://xxx
 ```
 
 ## License
