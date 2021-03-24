@@ -1,7 +1,7 @@
 {
-  "version": "1.0.0",
-  "name": "check-wip",
-  "description": "A GitHub Action sets a PR status to pending when any label or keyword in the title indicating it is WIP.",
+  "version": "1.0.1",
+  "name": "wip-action",
+  "description": "A GitHub Action sets a PR status to pending if it finds specified terms in the pull request title, label or commit message.",
   "main": "dist/index.js",
   "files": [
     "dist",

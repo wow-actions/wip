@@ -1,33 +1,24 @@
-import { getInput } from '@actions/core'
 import yaml from 'js-yaml'
-import { Octokit } from './types'
+import * as core from '@actions/core'
+import { Octokit, Section } from './types'
 import { Util } from './util'
 
 export namespace Config {
-  export type Location = 'title' | 'label' | 'commit'
-
-  export interface Item {
-    terms: string[]
-    locations: Location[]
-  }
-
-  export const defaultConfig: Item = {
+  export const defaultConfig: Section = {
     locations: ['title', 'label'],
     terms: ['wip', 'work in progress', '🚧'],
   }
 
-  export const name = 'wip'
-
   export async function get(octokit: Octokit) {
     try {
-      const path = getInput('CONFIG_FILE')
+      const path = core.getInput('CONFIG_FILE')
       if (path) {
         const content = await Util.getFileContent(octokit, path)
         if (content) {
-          const config = yaml.load(content) as Item | Item[]
+          const config = yaml.load(content) as Section | Section[]
           if (config) {
             const configs = Array.isArray(config) ? config : [config]
-            const keys: (keyof Item)[] = ['terms', 'locations']
+            const keys: (keyof Section)[] = ['terms', 'locations']
             configs.forEach((entry) => {
               keys.forEach((key) => {
                 if (!entry[key]) {
@@ -44,7 +35,7 @@ export namespace Config {
 
             return {
               configs,
-              custom: true,
+              manual: true,
             }
           }
         }

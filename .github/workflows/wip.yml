@@ -1,4 +1,4 @@
-name: ✅　Test
+name: 🚧　WIP
 on:
   pull_request:
     types:
