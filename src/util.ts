@@ -23,6 +23,14 @@ export namespace Util {
     return keywords.length ? keywords : presets
   }
 
+  export function getWIPDescription() {
+    return core.getInput('wip_description') || 'work in progress'
+  }
+
+  export function getReadyDescription() {
+    return core.getInput('ready_description') || 'ready for review'
+  }
+
   export function getContect() {
     return core.getInput('context') || 'WIP'
   }

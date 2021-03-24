@@ -28,6 +28,14 @@ inputs:
       For example, if your continuous integration system is posting build status, you would want to provide the deep link for the build output for this specific SHA:
       http://ci.example.com/user/repo/build/sha
 
+  wip_description:
+    required: false
+    description: A short description of the status.
+
+  ready_description:
+    required: false
+    description: A short description of the status.
+
 runs:
   using: node12
   main: dist/index.js

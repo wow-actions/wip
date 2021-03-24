@@ -51,19 +51,21 @@ export namespace Action {
         }
 
         const isWip = summarys.length > 0
-        const description = isWip ? 'work in progress' : 'ready for review'
+        const desc = isWip
+          ? Util.getWIPDescription()
+          : Util.getReadyDescription()
         const octokit = Util.getOctokit()
         await octokit.repos.createCommitStatus({
           ...context.repo,
-          description,
           sha: payload.head.sha,
           state: isWip ? 'pending' : 'success',
           context: Util.getContect(),
           target_url: Util.getTargetUrl(),
+          description: desc,
         })
 
         if (isWip) {
-          core.info(`${description}\n${summarys.join('\n')}`)
+          core.info(`${desc}\n${summarys.join('\n')}`)
         }
       }
     } catch (e) {
