@@ -6,36 +6,9 @@ inputs:
   GITHUB_TOKEN:
     required: true
     description: Your GitHub token for authentication.
-
-  labels:
+  CONFIG_FILE:
+    description: Config file path relative to your repo's root.
     required: false
-    description: Comma separated and case sensitive labels.
-
-  keywords:
-    required: false
-    description: Comma separated and case insensitive keywords.
-
-  context:
-    required: false
-    description: |
-      A string label to differentiate this status from the status of other systems.
-      This field is case-insensitive.
-
-  target_url:
-    required: false
-    description: |
-      The target URL to associate with this status. This URL will be linked from the GitHub UI to allow users to easily see the source of the status.
-      For example, if your continuous integration system is posting build status, you would want to provide the deep link for the build output for this specific SHA:
-      http://ci.example.com/user/repo/build/sha
-
-  wip_description:
-    required: false
-    description: A short description of the status.
-
-  ready_description:
-    required: false
-    description: A short description of the status.
-
 runs:
   using: node12
   main: dist/index.js
