@@ -53,9 +53,9 @@ export namespace Action {
           const octokit = Util.getOctokit()
           octokit.repos.setStatusCheckContexts()
           octokit.request('POST /repos/:owner/:repo/statuses/:sha', {
-            owner: payload.repository.owner.login,
-            repo: payload.repository.name,
-            sha: payload.pull_request.head.sha,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            sha: context.sha,
             state: isWip ? 'pending' : 'success',
             description: isWip ? 'work in progress' : 'ready for review',
             target_url: 'https://github.com/bubkoo/check-wip',
