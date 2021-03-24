@@ -8,6 +8,7 @@ Create a `.github/workflows/wip.yml` file in the repository you want to install 
 
 ```yml
 name: WIP
+
 on:
   pull_request:
     types:
@@ -17,6 +18,7 @@ on:
       - edited
       - labeled
       - unlabeled
+
 jobs:
   WIP:
     runs-on: ubuntu-latest
