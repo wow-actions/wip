@@ -16,6 +16,9 @@ export namespace Action {
         const blockingLabels = Util.getBlockingLabels()
         const blockingKeywords = Util.getBlockingKeywords()
 
+        core.info(`labels:${blockingLabels.join(',')}`)
+        core.info(`keywords:${blockingKeywords.join(',')}`)
+
         const effected: {
           labels: string[]
           keywords: string[]
@@ -53,8 +56,7 @@ export namespace Action {
           const octokit = Util.getOctokit()
           octokit.repos.setStatusCheckContexts()
           octokit.request('POST /repos/:owner/:repo/statuses/:sha', {
-            owner: context.repo.owner,
-            repo: context.repo.repo,
+            ...context.repo,
             sha: context.sha,
             state: isWip ? 'pending' : 'success',
             description: isWip ? 'work in progress' : 'ready for review',
