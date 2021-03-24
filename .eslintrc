@@ -30,8 +30,10 @@
   "rules": {
     "import/extensions": 0,
     "import/no-unresolved": 0,
+    "no-param-reassign": [2, { "props": false }],
     "@typescript-eslint/no-namespace": 0,
     "@typescript-eslint/no-explicit-any": 0,
-    "@typescript-eslint/explicit-module-boundary-types": 0
+    "@typescript-eslint/explicit-module-boundary-types": 0,
+    "@typescript-eslint/no-non-null-assertion": 0
   }
 }
