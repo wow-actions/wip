@@ -1,6 +1,6 @@
 # WIP Action
 
-> Sets a pull request status to pending. Inspirated by [WIP](https://github.com/wip/app) App.
+> Sets a pull request status to pending. Inspirated by [WIP](https://github.com/wip/app) app.
 
 By default, WIP is setting a pull request status to pending if it finds one of the following terms in the pull request title or label.
 
