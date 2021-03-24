@@ -54,8 +54,7 @@ export namespace Action {
 
         if (isWip) {
           const octokit = Util.getOctokit()
-          octokit.repos.setStatusCheckContexts()
-          octokit.repos.createCommitStatus({
+          await octokit.repos.createCommitStatus({
             ...context.repo,
             sha: payload.head.sha,
             state: isWip ? 'pending' : 'success',
