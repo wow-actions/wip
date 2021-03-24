@@ -10,6 +10,7 @@ export interface Section {
 }
 
 export interface State {
+  id?: string
   wip: boolean
   configs?: Section[]
   manual?: boolean

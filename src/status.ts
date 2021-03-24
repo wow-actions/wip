@@ -1,5 +1,6 @@
 import { debug } from '@actions/core'
 import { context } from '@actions/github'
+import { v4 as uuidv4 } from 'uuid'
 import { Octokit, State } from './types'
 import { Config } from './config'
 import { Util } from './util'
@@ -71,17 +72,24 @@ export namespace Status {
       check_name: checkName,
     })
 
-    const checkRuns = data.check_runs
+    const checkRuns = data.check_runs.filter(
+      (item) =>
+        item.external_id != null &&
+        item.external_id.startsWith(`[${checkName}]`),
+    )
+
     if (checkRuns.length === 0) {
-      debug('no previous check runs.')
+      debug('No previous check runs.')
       return true
     }
 
-    const [{ conclusion, output }] = checkRuns
+    const [{ conclusion, external_id: id, output }] = checkRuns
     const isWip = conclusion !== 'success'
     const hasOverride = output && /override/.test(output.title)
 
-    debug(`last check run: ${JSON.stringify({ conclusion, output })}`)
+    debug(`Found check run: ${JSON.stringify({ conclusion, output })}`)
+
+    nextState.id = id
 
     return isWip !== nextState.wip || hasOverride !== nextState.override
   }
@@ -106,10 +114,17 @@ export namespace Status {
       options.completed_at = new Date().toISOString()
     }
 
+    const output = Util.getOutput(nextState)
+
+    debug('update status with')
+    debug(`  metadata: ${JSON.stringify(options)}`)
+    debug(`  output: ${JSON.stringify(output)}`)
+
     return octokit.checks.create({
       ...context.repo,
       ...options,
-      output: Util.getOutput(nextState),
+      output,
+      external_id: nextState.id || `[${checkName}]${uuidv4()}`,
       head_sha: context.payload.pull_request!.head.sha,
 
       // workaround for https://github.com/octokit/rest.js/issues/874
