@@ -10,7 +10,7 @@ By default, WIP is setting a pull request status to pending if it finds one of t
 
 ## Usage
 
-Create a `.github/workflows/wip.yml` file in the repository you want to install this action, then add the following to it:
+Create a `.github/workflows/wip.yml` file in the repository you want to install this action:
 
 ```yml
 name: WIP
