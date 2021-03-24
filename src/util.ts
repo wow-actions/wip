@@ -22,4 +22,14 @@ export namespace Util {
       .map((keyword) => keyword.trim().toLocaleLowerCase())
     return keywords.length ? keywords : presets
   }
+
+  export function getContect() {
+    const context = core.getInput('context') || ''
+    return context.length ? context : undefined
+  }
+
+  export function getTargetUrl() {
+    const url = core.getInput('target_url') || ''
+    return url.length ? url : undefined
+  }
 }

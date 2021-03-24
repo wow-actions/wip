@@ -51,18 +51,19 @@ export namespace Action {
         }
 
         const isWip = summarys.length > 0
+        const description = isWip ? 'work in progress' : 'ready for review'
+        const octokit = Util.getOctokit()
+        await octokit.repos.createCommitStatus({
+          ...context.repo,
+          description,
+          sha: payload.head.sha,
+          state: isWip ? 'pending' : 'success',
+          context: Util.getContect(),
+          target_url: Util.getTargetUrl(),
+        })
 
         if (isWip) {
-          const octokit = Util.getOctokit()
-          await octokit.repos.createCommitStatus({
-            ...context.repo,
-            sha: payload.head.sha,
-            state: isWip ? 'pending' : 'success',
-            description: isWip ? 'work in progress' : 'ready for review',
-            target_url: 'https://github.com/bubkoo/check-wip',
-            context: 'Check WIP (action)',
-          })
-          core.info(summarys.join('\n'))
+          core.info(`${description}\n${summarys.join('\n')}`)
         }
       }
     } catch (e) {

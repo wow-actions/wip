@@ -23,4 +23,4 @@ jobs:
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           labels: do-not-merge, wip, rfc
-          keywords: test, wip, WIP
+          keywords: wip, rfc
