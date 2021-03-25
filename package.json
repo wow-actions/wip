@@ -1,5 +1,5 @@
 {
-  "version": "1.0.1",
+  "version": "1.0.2",
   "name": "wip-action",
   "description": "A GitHub Action sets a PR status to pending if it finds specified terms in the pull request title, label or commit message.",
   "main": "dist/index.js",
