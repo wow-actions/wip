@@ -51,15 +51,23 @@ export namespace Action {
         })
 
         const summarys: string[] = []
-        if (effected.labels.length) {
-          summarys.push(`Blocking labels: ${effected.labels.join(', ')}`)
-        }
 
         if (effected.keywords.length) {
           summarys.push(
             `Blocking keywords in title: ${effected.keywords.join(', ')}`,
           )
         }
+
+        if (effected.labels.length) {
+          summarys.push(`Blocking labels: ${effected.labels.join(', ')}`)
+        }
+
+        const indicate =
+          effected.keywords.length > 0
+            ? `(Title contains "${effected.keywords[0]}")`
+            : effected.labels.length > 0
+            ? `(Label contains "${effected.labels[0]}")`
+            : ''
 
         const isWip = summarys.length > 0
         const desc = isWip
@@ -72,12 +80,12 @@ export namespace Action {
           state: isWip ? 'pending' : 'success',
           context: Util.getContect(),
           target_url: Util.getTargetUrl(),
-          description: desc,
+          description: desc + indicate,
         })
 
         if (isWip) {
           core.info(`${desc}\n${summarys.join('\n')}`)
-          if (core.getInput('setFailed') !== 'false') {
+          if (core.getInput('setFailed') === 'true') {
             core.setFailed(`${desc}\n${summarys.join('\n')}`)
           }
         }
