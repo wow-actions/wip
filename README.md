@@ -1,11 +1,15 @@
 # WIP Action
 
-> Sets a pull request status to pending. Inspirated by [WIP](https://github.com/wip/app) app.
+> A Github Action to mark a pull request commits with pending state if it finds specified terms in the pull request title or label.
 
-By default, WIP is setting a pull request status to pending if it finds one of the following terms in the pull request title or label.
+By default, this action is setting a pull request commits state to pending if it finds one of the following terms in the pull request title or label. And all terms are case insensitive.
 
 - wip
+- rfc
 - work in progress
+- work-in-progress
+- do not merge
+- do-not-merge
 - 🚧
 
 ## Usage
@@ -30,50 +34,57 @@ jobs:
     steps:
       - uses: bubkoo/check-wip@v1
         with:
-          # GitHub token for authentication.
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # Path to configuration file relative the root of your repo.
-          # e.g.: .github/workflows/config/wip.yml
-          CONFIG_FILE: config-file-path
+
+          # Set action to failed when wip.
+          setFailed: true
+
+          # Match with PR labels. Comma separated and case insensitive labels.
+          labels: 'do-not-merge', 'work in progress', 'wip', 'rfc', '🚧'
+
+          # Match with PR title. Comma separated and case insensitive keywords.
+          keywords: 'do-not-merge', 'work in progress', 'wip', 'rfc', '🚧'
+
+          # A string label to differentiate this status from the status of
+          # other systems. This field is case-insensitive.
+          # @see: https://docs.github.com/en/rest/reference/repos#create-a-commit-status
+          context: WIP
+
+          # The target URL to associate with this status. This URL will be
+          # linked from the GitHub UI to allow users to easily see the source
+          # of the status. For example, if your continuous integration system
+          # is posting build status, you would want to provide the deep link
+          # for the build output for this specific SHA: http://ci.example.com/user/repo/build/sha
+          # @see: https://docs.github.com/en/rest/reference/repos#create-a-commit-status
+          target_url: ''
+
+          # A short description of the status.
+          # @see: https://docs.github.com/en/rest/reference/repos#create-a-commit-status
+          wip_description: 'work in progress'
+          ready_description: 'ready for review'
 ```
 
-## Configuration
-
-Two options can be configured in the configuration file.
-
-- **locations**: any of `title` (pull request title), `label`(lable name) and `commit` (commit subject: 1st line of the pull request’s commit messages). Default: `title` and `label`
-- **terms**: list of strings to look for in the defined locations. All terms are case-insensitive. Default: "wip", "work in progress" and "🚧"
-
-Example:
+The shortest configuration with default inputs looks like this:
 
 ```yml
-locations:
-  - title
-  - label
-  - commit
-terms:
-  - do not merge
-  - ⛔
+name: WIP
+on:
+  pull_request:
+    types:
+      - opened
+      - edited
+      - labeled
+      - unlabeled
+      - synchronize
+
+jobs:
+  WIP:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: bubkoo/check-wip@v1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
-
-The above configuration makes WIP look for `do not merge` and `⛔` in the pull request title, all assigned label names and all commit subjects.
-
-You can also configure different terms for different locations:
-
-```yaml
-- terms: ⛔
-  locations:
-    - title
-    - label
-- terms:
-    - fixup!
-    - squash!
-  locations: commit
-```
-
-The above configuration looks first for `⛔` in the pull request title and assigned label names. After that it looks for `fixup!` and `squash!` in the commit subjects.
-
-**A Note About Term Matching:** Terms which contain only non-word characters as defined by JS RegExp `[^a-za-z0-9_]` are matched regardless of word boundaries. Any other terms (which may contain a mix of word and non-word characters will only match when surrounded by start/end OR non-word characters.
 
 ## License
 
