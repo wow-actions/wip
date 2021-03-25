@@ -2,7 +2,7 @@
 
 > A Github Action to mark a pull request commits with pending state if it finds specified terms in the pull request title or label.
 
-By default, this action is setting a pull request commits state to pending if it finds one of the following terms in the pull request title or label. And all terms are case insensitive.
+By default, this action is setting a pull request commits state to pending if it finds one of the following terms in the pull request title or label. All terms are case insensitive.
 
 - wip
 - rfc
