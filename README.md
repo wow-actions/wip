@@ -12,6 +12,8 @@ By default, this action is setting a pull request commits state to pending if it
 - do-not-merge
 - 🚧
 
+![screenshot](https://github.com/bubkoo/wip-action/blob/master/screenshot.jpg?raw=true)
+
 ## Usage
 
 Create a `.github/workflows/wip.yml` file in the repository you want to install this action:
