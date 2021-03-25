@@ -37,7 +37,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
           # Set action to failed when wip.
-          setFailed: true
+          setFailed: false
 
           # Match with PR labels. Comma separated and case insensitive labels.
           labels: 'do-not-merge', 'work in progress', 'wip', 'rfc', '🚧'
