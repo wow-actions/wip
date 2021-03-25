@@ -31,11 +31,9 @@ export namespace Action {
         const effected: {
           labels: string[]
           keywords: string[]
-          commits: string[]
         } = {
           labels: [],
           keywords: [],
-          commits: [],
         }
 
         blockingLabels.forEach((bl) => {

@@ -8,21 +8,24 @@ export namespace Util {
   }
 
   const presets = ['do-not-merge', 'work in progress', 'wip', 'rfc', '🚧']
+  const separator = /\s?[,\n\r]\s?/
 
   export function getBlockingLabels() {
-    const raw = core.getInput('labels') || ''
-    const labels = raw
-      .split(/\s?,\s?/)
+    const labels = core
+      .getInput('labels')
+      .split(separator)
       .map((label) => label.trim().toLowerCase())
-    return labels.length ? labels : presets
+      .filter((label) => label.length > 0)
+    return labels.length > 0 ? labels : [...presets]
   }
 
   export function getBlockingKeywords() {
-    const raw = core.getInput('keywords') || ''
-    const keywords = raw
-      .split(/\s?[,\n\r]\s?/)
+    const keywords = core
+      .getInput('keywords')
+      .split(separator)
       .map((keyword) => keyword.trim().toLowerCase())
-    return keywords.length ? keywords : presets
+      .filter((keyword) => keyword.length > 0)
+    return keywords.length > 0 ? keywords : [...presets]
   }
 
   export function getWIPDescription() {
