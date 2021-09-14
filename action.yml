@@ -11,19 +11,16 @@ inputs:
     required: false
     description: Set action to failed when wip.
 
-  labels:
+  config:
     required: false
     description: Match with PR labels. Comma separated and case insensitive labels.
 
-  keywords:
-    required: false
-    description: Match with PR title. Comma separated and case insensitive keywords.
-
-  context:
+  check_name:
     required: false
     description: |
       A string label to differentiate this status from the status of other systems.
       This field is case-insensitive.
+    default: WIP
 
   target_url:
     required: false
@@ -32,13 +29,15 @@ inputs:
       For example, if your continuous integration system is posting build status, you would want to provide the deep link for the build output for this specific SHA:
       http://ci.example.com/user/repo/build/sha
 
-  wip_description:
+  wip_desc:
     required: false
     description: A short description of the status.
+    default: work in progress
 
-  ready_description:
+  ready_desc:
     required: false
     description: A short description of the status.
+    default: ready for review
 
 runs:
   using: node12

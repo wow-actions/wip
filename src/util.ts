@@ -1,10 +1,21 @@
 import * as core from '@actions/core'
 import * as github from '@actions/github'
+import { Octokit } from './octokit'
 
 export namespace Util {
   export function getOctokit() {
     const token = core.getInput('GITHUB_TOKEN', { required: true })
     return github.getOctokit(token)
+  }
+
+  export async function getCommitSubjects(octokit: Octokit) {
+    const { context } = github
+    const { data: commits } = await octokit.rest.pulls.listCommits({
+      ...context.repo,
+      pull_number: context.payload.pull_request!.number,
+    })
+
+    return commits.map((e) => e.commit.message.split('\n')[0])
   }
 
   const presets = ['do-not-merge', 'work in progress', 'wip', 'rfc', '🚧']

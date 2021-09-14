@@ -22,3 +22,11 @@ jobs:
       - uses: ./
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          config:
+            terms:
+              - wip
+              - work in progress
+              - 🚧
+            locations:
+              - title
+              - label
