@@ -1,6 +1,5 @@
 import * as core from '@actions/core'
 import * as github from '@actions/github'
-import { v4 as uuid } from 'uuid'
 import { Config } from './config'
 import { Output } from './output'
 import { Matcher } from './matcher'
@@ -83,12 +82,7 @@ export namespace Status {
       check_name: checkName,
     })
 
-    const checkRuns = data.check_runs.filter(
-      (item) =>
-        item.external_id != null &&
-        item.external_id.startsWith(`[${checkName}]`),
-    )
-
+    const checkRuns = data.check_runs
     if (checkRuns.length === 0) {
       core.debug('[wip] No previous check runs.')
       return true
@@ -144,7 +138,7 @@ export namespace Status {
     const { context } = github
     const metadata = {
       output,
-      external_id: `[${checkName}]${uuid()}`,
+      context: checkName,
       head_sha: context.payload.pull_request!.head.sha,
 
       // workaround for https://github.com/octokit/rest.js/issues/874
