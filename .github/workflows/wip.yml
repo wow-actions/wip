@@ -26,7 +26,8 @@ jobs:
           yarn build
       - uses: ./
         with:
-          GITHUB_TOKEN: ${{ env.bot_token }}
+          # GITHUB_TOKEN: ${{ env.bot_token }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           config: |
             terms:
               - wip
