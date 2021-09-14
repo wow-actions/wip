@@ -4,7 +4,7 @@ import { v4 as uuid } from 'uuid'
 import { Config } from './config'
 import { Output } from './output'
 import { Matcher } from './matcher'
-import { Octokit } from './Octokit'
+import { Octokit } from './octokit'
 
 export namespace Status {
   export interface State {

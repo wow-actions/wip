@@ -1,7 +1,7 @@
 import * as github from '@actions/github'
 import { emojiToName } from 'gemoji'
 import { Status } from './status'
-import { Octokit } from './Octokit'
+import { Octokit } from './octokit'
 import { Config } from './config'
 
 export namespace Output {
