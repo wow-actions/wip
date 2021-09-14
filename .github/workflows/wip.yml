@@ -26,7 +26,12 @@ jobs:
             terms:
               - wip
               - work in progress
+              - work-in-progress
+              - do not merge
+              - do-not-merge
+              - rfc
               - 🚧
             locations:
               - title
               - label
+              - commit

@@ -1,7 +1,5 @@
 import yaml from 'js-yaml'
 import * as core from '@actions/core'
-import * as github from '@actions/github'
-import { Octokit } from './octokit'
 
 export interface Config {
   locations: Config.Location[]
@@ -24,30 +22,17 @@ export namespace Config {
     ],
   }
 
-  const configPath = './.github/workflows/config/wip.yml'
-
-  const readfile = async (octokit: Octokit, path: string) => {
-    try {
-      const response = await octokit.rest.repos.getContent({
-        ...github.context.repo,
-        path,
-      })
-
-      const { content } = response.data as any
-      return content ? Buffer.from(content, 'base64').toString() : null
-    } catch (err) {
-      return null
-    }
-  }
-
-  export async function get(octokit: Octokit) {
-    const raw = core.getInput('config')
-    core.debug(`raw: ${raw}`)
-    core.debug(`${yaml.load(raw)}`)
-    const content = await readfile(octokit, configPath)
+  export async function get() {
+    const content = core.getInput('config')
     if (content) {
       const config = yaml.load(content) as Config | Config[]
       if (config) {
+        if (typeof config !== 'object') {
+          core.setFailed(
+            'Can not parse the configurations. Please check the "config" input in your workflow file',
+          )
+        }
+
         const configs = Array.isArray(config) ? config : [config]
         const keys: (keyof Config)[] = ['terms', 'locations']
         configs.forEach((entry) => {

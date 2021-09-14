@@ -39,7 +39,7 @@ export namespace Status {
       }
     }
 
-    const { configs, manual } = await Config.get(octokit)
+    const { configs, manual } = await Config.get()
     const checkCommit = configs.some((entry) =>
       entry.locations.some((loc) => loc === 'commit'),
     )
@@ -73,7 +73,7 @@ export namespace Status {
     }
   }
 
-  const checkName = 'WIP'
+  const checkName = core.getInput('check_name') || 'WIP'
 
   export async function check(octokit: Octokit, nextState: State) {
     const { context } = github
@@ -135,7 +135,7 @@ export namespace Status {
       options.completed_at = new Date().toISOString()
     }
 
-    const output = Output.get(octokit, nextState)
+    const output = Output.get(nextState)
 
     core.debug(`[wip] Create check run.`)
     core.debug(`  metadata: ${JSON.stringify(options)}`)
@@ -143,7 +143,6 @@ export namespace Status {
 
     const { context } = github
     const metadata = {
-      ...options,
       output,
       external_id: `[${checkName}]${uuid()}`,
       head_sha: context.payload.pull_request!.head.sha,
@@ -161,6 +160,7 @@ export namespace Status {
 
     return octokit.rest.checks.create({
       ...context.repo,
+      ...options,
       ...metadata,
     })
   }

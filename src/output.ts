@@ -1,36 +1,32 @@
+import * as core from '@actions/core'
 import * as github from '@actions/github'
 import { emojiToName } from 'gemoji'
 import { Status } from './status'
-import { Octokit } from './octokit'
 import { Config } from './config'
 
 export namespace Output {
   const ucfirst = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
+  const { defaults } = Config
+  // const WIP_DESC = core.getInput('wip_desc') || 'work in progress'
+  const READY_DESC = core.getInput('ready_desc') || 'ready for review'
+  const group = (arr: string[]) => arr.map((item) => `  - ${item}`).join('\n')
 
-  const getDefaultConfiguration = () => `
+  const getDefaultConfig = () => `
 
 \`\`\`yml
 terms:
-  - wip
-  - work in progress
-  - 🚧
+${group(defaults.terms)}
 locations:
-  - title
-  - label
+${group(defaults.locations)}
 \`\`\`
 
 `
 
-  const getREADME = () => `
+  const readme = () => `
 
 By default, WIP is setting a pull request status to pending if it finds one of the following terms in the pull request title or label.
 
-- wip
-- work in progress
-- work-in-progress
-- do not merge
-- do-not-merge
-- 🚧
+${group(defaults.terms)}
 
 We can custom the configurations by creating a \`.github/apps/wip.yml\` file in your repository. Two options can be configured in the configuration file.
 
@@ -71,7 +67,7 @@ The above configuration looks first for \`⛔\` in the pull request title and as
 
 `
 
-  const getManualConfiguration = (configs: Config[]) => {
+  const getManualConfig = (configs: Config[]) => {
     const line = (c: Config) =>
       `| ${c.terms.join(', ')} | ${c.locations.join(', ')} |`
 
@@ -82,44 +78,44 @@ ${configs.map((config) => line(config)).join('\n')}
 `
   }
 
-  export function get(octokit: Octokit, state: Status.State) {
+  export function get(state: Status.State) {
     const output: { title: string; summary: string; text?: string } = {
       title: '',
       summary: '',
     }
 
     if (state.wip) {
-      let emoji = (emojiToName as any)[state.match!]
-      if (emoji === undefined) {
-        emoji = `"${state.match}"` // Text match
-      } else {
-        emoji = `a ${emoji} emoji` // Emoji match
-      }
+      const emoji = (emojiToName as any)[state.match!]
+      const match =
+        emoji === undefined
+          ? `"${state.match}"` // Text match
+          : `a ${emoji} emoji` // Emoji match
 
-      const map = {
+      const locationMap = {
         title: 'title',
         label: 'label',
         commit: 'commit subject',
       }
 
-      const location = map[state.location!]
+      const location = locationMap[state.location!]
+      // const desc = ucfirst(WIP_DESC)
 
-      output.title = `${ucfirst(location)} contains ${emoji}`
+      output.title = `${ucfirst(location)} contains ${match}`
 
       const pr = github.context.payload.pull_request!
 
       output.summary =
         // tslint:disable-next-line
-        `The ${location} "${state.text}" contains "${state.match}".` +
+        `The ${location} "${state.text}" contains ${match}.` +
         '\n' +
         '\n' +
         `You can override the status by adding "@wip ready for review" to the end of the [pull request description](${pr.html_url}#discussion_bucket).`
 
       output.text =
         // tslint:disable-next-line
-        `The default configuration is applied:${getDefaultConfiguration()}${getREADME()}`
+        `The default configuration is applied:${getDefaultConfig()}${readme()}`
     } else {
-      output.title = 'Ready for review'
+      output.title = ucfirst(READY_DESC)
     }
 
     if (state.override) {
@@ -130,9 +126,9 @@ ${configs.map((config) => line(config)).join('\n')}
     } else if (state.manual) {
       output.text =
         // tslint:disable-next-line
-        `The following configuration was applied:${getManualConfiguration(
+        `The following configuration was applied:${getManualConfig(
           state.configs!,
-        )}${getREADME()}`
+        )}${readme()}`
     }
 
     return output

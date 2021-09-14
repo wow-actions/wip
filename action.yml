@@ -7,10 +7,6 @@ inputs:
     required: true
     description: Your GitHub token for authentication.
 
-  setFailed:
-    required: false
-    description: Set action to failed when wip.
-
   config:
     required: false
     description: Match with PR labels. Comma separated and case insensitive labels.
@@ -21,13 +17,6 @@ inputs:
       A string label to differentiate this status from the status of other systems.
       This field is case-insensitive.
     default: WIP
-
-  target_url:
-    required: false
-    description: |
-      The target URL to associate with this status. This URL will be linked from the GitHub UI to allow users to easily see the source of the status.
-      For example, if your continuous integration system is posting build status, you would want to provide the deep link for the build output for this specific SHA:
-      http://ci.example.com/user/repo/build/sha
 
   wip_desc:
     required: false
