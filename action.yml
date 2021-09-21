@@ -1,5 +1,5 @@
 name: WIP Action
-description: Mark a pull request commits with pending state if it finds specified terms in the pull request title or label.
+description: Sets a pull request commits with pending state if it finds specified terms in the pull request title or label.
 author: bubkoo <bubkoo.wy@gmail.com>
 
 inputs:

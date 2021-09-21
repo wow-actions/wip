@@ -1,6 +1,5 @@
-# WIP Action
-
-> A Github Action to mark a pull request commits with pending state if it finds specified terms in the pull request title or label.
+<h1 align="center">WIP</h1>
+<p align="center"><strong>Sets a pull request commits with pending state if it finds specified terms in the pull request title or label</strong></p>
 
 By default, this action is setting a pull request commits state to pending if it finds one of the following terms in the pull request title or label. All terms are case insensitive.
 
@@ -12,7 +11,7 @@ By default, this action is setting a pull request commits state to pending if it
 - do-not-merge
 - 🚧
 
-![screenshot](https://github.com/bubkoo/wip-action/blob/master/screenshot.jpg?raw=true)
+![screenshot](https://github.com/wow-actions/wip/blob/master/screenshot.jpg?raw=true)
 
 ## Usage
 
@@ -34,7 +33,7 @@ jobs:
   WIP:
     runs-on: ubuntu-latest
     steps:
-      - uses: bubkoo/check-wip@v1
+      - uses: wow-actions/wip@v1
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -83,7 +82,7 @@ jobs:
   WIP:
     runs-on: ubuntu-latest
     steps:
-      - uses: bubkoo/check-wip@v1
+      - uses: wow-actions/wip@v1
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```

@@ -72,7 +72,7 @@ export namespace Action {
           ? Util.getWIPDescription()
           : Util.getReadyDescription()
         const octokit = Util.getOctokit()
-        await octokit.repos.createCommitStatus({
+        await octokit.rest.repos.createCommitStatus({
           ...context.repo,
           sha: payload.head.sha,
           state: isWip ? 'pending' : 'success',
