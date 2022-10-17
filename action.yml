@@ -41,7 +41,7 @@ inputs:
     description: A short description of the status.
 
 runs:
-  using: node12
+  using: node16
   main: dist/index.js
 
 branding:
